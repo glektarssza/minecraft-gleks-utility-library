@@ -1,4 +1,4 @@
-# Security Policy
+# Security Policy #
 
 ## Supported Versions ##
 
@@ -12,7 +12,7 @@ The table explains which versions are currently being supported versus not.
 ## Reporting a Vulnerability ##
 
 To report possible security vulnerabilities with supported versions, please use
-our [official GitHub security page](https://github.com/glektarssza/repository-template/security).
+our [official GitHub security page](https://github.com/glektarssza/minecraft-gleks-utility-library/security).
 
 This is the quickest and easiest way to report possible security vulnerabilities
 and get the attention of developers working on the project.
