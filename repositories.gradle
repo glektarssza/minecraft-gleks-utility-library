@@ -1,0 +1,35 @@
+repositories {
+    maven {
+        name = 'OvermindDL1 Maven'
+        url = uri('https://gregtech.overminddl1.com/')
+    }
+    maven {
+        name = 'GTNH Maven'
+        url = uri('https://nexus.gtnewhorizons.com/repository/public/')
+    }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Cleanroom Maven'
+                url = uri('https://maven.cleanroommc.com')
+            }
+        }
+        filter {
+            includeGroup('com.cleanroommc')
+            includeGroup('zone.rong')
+
+        }
+    }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'CurseForge Maven'
+                url = uri('https://cursemaven.com')
+            }
+        }
+        filter {
+            includeGroup('curse.maven')
+        }
+    }
+    mavenCentral()
+}

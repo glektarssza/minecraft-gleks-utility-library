@@ -1,0 +1,153 @@
+plugins {
+    id('eclipse')
+    id('java-library')
+    id('maven-publish')
+    id('com.gtnewhorizons.retrofuturagradle') version '2.0.2'
+    id('com.diffplug.spotless') version '8.8.0' apply false
+}
+
+project.ext.setProperty = { File file, String key, String value ->
+    def s = file.text.replaceAll("(?ms)(^\\Q${key}\\E\\s*=).*?\$", '')
+    s = s.replaceAll('\n{2,}', '\n')
+    file.text = s + key + '=' + value + '\n'
+}
+
+project.ext.setEclipsePreference = { File prefsFile, String key, String value ->
+    if (!prefsFile.exists()) {
+        prefsFile.parentFile.mkdirs()
+        prefsFile.write("eclipse.preferences.version=1\n")
+    }
+    setProperty(prefsFile, key, value)
+}
+
+project.ext.getPropertyOrDefault = { String key, String defaultValue ->
+    return providers.gradleProperty(key).getOrElse(defaultValue)
+}
+
+project.ext.getProperty = { String key ->
+    return providers.gradleProperty(key).get()
+}
+
+group = "${getProperty('mod.base_group')}.${getProperty('mod.id')}"
+version = getProperty('mod.version')
+
+base {
+    archivesName = getProperty('mod.archive_base_name')
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+        vendor = org.gradle.jvm.toolchain.JvmVendorSpec.ADOPTIUM
+    }
+    withSourcesJar()
+    withJavadocJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = getPropertyOrDefault('java.compiler.file.encoding', 'UTF-8')
+}
+
+configurations {
+    embed
+    implementation.extendsFrom(embed)
+    create('runtimeOnlyNonPublishable') {
+        description = 'Runtime only dependencies that are not published alongside the jar'
+        canBeConsumed = false
+        canBeResolved = false
+    }
+
+    create('devOnlyNonPublishable') {
+        description = 'Runtime and compile-time dependencies that are not published alongside the jar (compileOnly + runtimeOnlyNonPublishable)'
+        canBeConsumed = false
+        canBeResolved = false
+    }
+    compileOnly.extendsFrom(devOnlyNonPublishable)
+    runtimeOnlyNonPublishable.extendsFrom(devOnlyNonPublishable)
+    runtimeClasspath.extendsFrom(runtimeOnlyNonPublishable)
+    testRuntimeClasspath.extendsFrom(runtimeOnlyNonPublishable)
+}
+
+minecraft {
+    username = 'Developer'
+    mcVersion = getProperty('minecraft.version')
+    def args = ["-ea:${project.group}"]
+    if (getPropertyOrDefault('mod.core_mod.enabled', 'false').toBoolean()) {
+        args << '-Dfml.coreMods.load=' + getProperty('mod.core_mod.plugin_class_name')
+    }
+    if (getPropertyOrDefault('mod.mixins.enabled', 'false').toBoolean()) {
+        args << '-Dmixin.hotSwap=' + getPropertyOrDefault('mod.mixins.hot_swap.enabled', 'false')
+        args << '-Dmixin.checks.interfaces=true'
+        args << '-Dmixin.debug.export=true'
+    }
+    extraRunJvmArguments.addAll(args)
+    groupsToExcludeFromAutoReobfMapping.addAll('com.diffplug', 'com.diffplug.durian', 'net.industrial-craft')
+    useDependencyAccessTransformers = true
+    injectedTags.put('MOD_NAME', getProperty('mod.name'))
+    injectedTags.put('MOD_ID', getProperty('mod.id'))
+    injectedTags.put('MOD_VERSION', getProperty('mod.version'))
+    injectedTags.put('MOD_DEPENDENCIES', getProperty('mod.dependencies'))
+    injectedTags.put('MOD_ACCEPTED_SAVE_VERSION_RANGE', getProperty('mod.version.accepted_save_range'))
+    injectedTags.put('MOD_ACCEPTED_REMOTE_VERSION_RANGE', getProperty('mod.version.accepted_remote_range'))
+    injectedTags.put('MOD_SIDED_PROXY_CLIENT_SIDE', getProperty('mod.sided_proxy.client_side'))
+    injectedTags.put('MOD_SIDED_PROXY_SERVER_SIDE', getProperty('mod.sided_proxy.server_side'))
+    injectedTags.put('UPDATE_MANIFEST_URL', getProperty('mod.gui_factory'))
+    injectedTags.put('MOD_GUI_FACTORY', getProperty('mod.update_manifest_url'))
+    injectedTags.put('MOD_SIGNATURE', getProperty('mod.signature'))
+    injectedTags.put('MINECRAFT_VERSION', getProperty('minecraft.version'))
+    injectedTags.put('MINECRAFT_VERSION_RANGE', getProperty('minecraft.version.range'))
+}
+
+tasks.injectTags.configure {
+    outputClassName.set("${project.group}.Tags")
+}
+
+tasks.processResources.configure {
+    // -- Needed for configuration cache to work
+    inputs.property('mod.name', getProperty('mod.name'))
+    inputs.property('mod.id', getProperty('mod.id'))
+    inputs.property('mod.description', getPropertyOrDefault('mod.description', ''))
+    inputs.property('mod.author', getPropertyOrDefault('mod.author', ''))
+    inputs.property('mod.version', getProperty('mod.version'))
+    inputs.property('mod.author', getPropertyOrDefault('mod.author', ''))
+    inputs.property('mod.dependencies', getPropertyOrDefault('mod.dependencies', ''))
+    inputs.property('mod.homepage', getPropertyOrDefault('mod.homepage', ''))
+    inputs.property('mod.credits', getPropertyOrDefault('mod.credits', ''))
+    inputs.property('mod.update_manifest_url', getPropertyOrDefault('mod.update_manifest_url', ''))
+    inputs.property('minecraft.version', getProperty('minecraft.version'))
+
+    def props = [
+        mod: [
+            name: getProperty('mod.name'),
+            id: getProperty('mod.id'),
+            description: getPropertyOrDefault('mod.description', ''),
+            author: getPropertyOrDefault('mod.author', ''),
+            version: getProperty('mod.version'),
+            author: getPropertyOrDefault('mod.author', ''),
+            dependencies: getPropertyOrDefault('mod.dependencies', ''),
+            homepage: getPropertyOrDefault('mod.homepage', ''),
+            credits: getPropertyOrDefault('mod.credits', ''),
+            update_manifest_url: getPropertyOrDefault('mod.update_manifest_url', ''),
+        ],
+        minecraft: [
+            version: getProperty('minecraft.version'),
+        ]
+    ]
+
+    filesMatching('mcmod.info') {
+        expand(props)
+    }
+}
+
+apply from: 'repositories.gradle'
+apply from: 'dependencies.gradle'
+apply from: 'access_transformer.gradle'
+apply from: 'mixins.gradle'
+apply from: 'tests.gradle'
+apply from: 'linting.gradle'
+apply from: 'ide.gradle'
+
+publishing {
+    publications {}
+    repositories {}
+}
