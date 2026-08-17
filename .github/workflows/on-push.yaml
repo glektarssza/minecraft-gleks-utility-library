@@ -2,6 +2,10 @@
 name: On Push
 on:
   push:
+concurrency:
+  cancel-in-progress: true
+  group: on-push-${{github.ref_name}}
+  queue: single
 jobs:
   build:
     name: Build

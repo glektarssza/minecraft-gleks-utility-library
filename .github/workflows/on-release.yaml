@@ -4,6 +4,10 @@ on:
   release:
     types:
       - published
+concurrency:
+  cancel-in-progress: false
+  group: on-release
+  queue: max
 jobs:
   test:
     name: Test

@@ -8,6 +8,10 @@ on:
   schedule:
     - cron: '0 12 * * 3'
   workflow_call:
+concurrency:
+  cancel-in-progress: true
+  group: codeql-${{github.ref_name}}
+  queue: single
 jobs:
   codeql:
     name: CodeQL
