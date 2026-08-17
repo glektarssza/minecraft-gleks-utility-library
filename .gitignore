@@ -1,45 +1,79 @@
 # Editors #
 ## Visual Studio Code ##
 ### Workspace Folder ###
-/.vscode/**
+/**/.vscode/**
 
 ### Exceptions ###
-!/.vscode/extensions.json
-!/.vscode/launch.json
-!/.vscode/tasks.json
-!/.vscode/*.code-snippets
-!/.vscode/*.code-workspace
+!/**/.vscode/extensions.json
+!/**/.vscode/launch.json
+!/**/.vscode/tasks.json
+!/**/.vscode/*.code-snippets
+!/**/.vscode/*.code-workspace
+
+### Local History ###
+/.history/**
+
+### Built Visual Studio Code Extensions ###
+/**/*.vsix
+
+## Eclipse ##
+/**/.project
+/**/.classpath
+/.settings/**
 
 ## Vim ##
 ### Swap ###
-[._]*.s[a-v][a-z]
-[._]*.sw[a-p]
-[._]*.s[a-rt-v][a-z]
-[._]*.ss[a-gi-z]
-[._]sw[a-p]
+/**/[._]*.s[a-v][a-z]
+/**/[._]*.sw[a-p]
+/**/[._]*.s[a-rt-v][a-z]
+/**/[._]*.ss[a-gi-z]
+/**/[._]sw[a-p]
 
 ### Session ###
-Session.vim
-Sessionx.vim
+/**/Session.vim
+/**/Sessionx.vim
 
 ### Temporary Files ###
-.netrwhist
-*~
+/**/.netrwhist
+/**/*~
 
 ### Auto-generated Tag Files ###
-tags
-ctags
+/**/tags
+/**/ctags
 
 ### Undo Persistence ###
-[._]*.un~
+/**/[._]*.un~
+
+## Eclipse ##
+### Core ###
+/**/.classpath
+/**/.factorypath
+/**/.project
+/**/.settings/**
 
 # Logs #
-*.log*
+/**/*.log*
 
 # Environment #
 ## General ##
-**/.env*
+/**/.envrc
 
 # Cache #
 ## CSpell ##
-.cspellcache
+/**/.cspellcache
+
+## Gradle ##
+/**/user.properties
+
+# Artifacts #
+## Gradle ##
+/**/bin/**
+/**/build/**
+/**/.gradle/**
+/**/*.jar
+!/**/gradle/wrapper/gradle-wrapper.jar
+
+# Debugging #
+## Gradle ##
+/**/run/**
+/**/bin/**
