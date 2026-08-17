@@ -1,0 +1,9 @@
+{
+    "required": true,
+    "target": "@env(DEFAULT)",
+    "minVersion": "0.8",
+    "package": "com.glektarssza.utility_library.mixins.vanilla",
+    "refmap": "mixins.gleks_utility_library.refmap.json",
+    "compatibilityLevel": "JAVA_8",
+    "mixins": []
+}
