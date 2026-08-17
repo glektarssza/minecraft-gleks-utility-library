@@ -154,7 +154,7 @@
         "java.inlayHints.parameterNames.enabled": "none",
         "java.jdt.ls.androidSupport.enabled": "off",
         "java.jdt.ls.appcds.enabled": "off",
-        "java.jdt.ls.java.home": "${env:HOME}/scoop/apps/temurin-jdk/current/",
+        "java.jdt.ls.java.home": "/usr/lib/jvm/java-25-temurin/",
         "java.jdt.ls.javac.enabled": "off",
         "java.jdt.ls.lombokSupport.enabled": true,
         "java.jdt.ls.protobufSupport.enabled": true,
