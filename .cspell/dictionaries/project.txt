@@ -16,6 +16,7 @@ deobf
 dfml
 diffplug
 dmixin
+dragonwell
 dsun
 ensurepath
 envrc
@@ -26,17 +27,20 @@ generis
 glek
 gleks
 glektarssza
+graalvm
 gradlew
 gson
 gtnewhorizons
 gtnh
 hookspath
 hotfixes
+hotspot
 importorder
 iregex
 javac
 javax
 jdks
+liberica
 libs
 mapfile
 mcmeta
@@ -53,6 +57,7 @@ noconfirm
 noninfringement
 nonnull
 nonnullbydefault
+openj
 overmind
 pacman
 pipx
@@ -63,6 +68,9 @@ reobf
 retrofuturagradle
 rong
 safecrlf
+sapmachine
+sarif
+semeru
 sessionx
 shengchen
 spongepowered
