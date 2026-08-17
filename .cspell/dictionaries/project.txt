@@ -37,6 +37,7 @@ iregex
 javac
 javax
 jdks
+libs
 mapfile
 mcmeta
 mcmod

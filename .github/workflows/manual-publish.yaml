@@ -1,8 +1,16 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-name: Manual Lint
+name: Manual Publish
 on:
   workflow_dispatch:
     inputs:
+      github-release-id:
+        description: |
+          The GitHub release ID to attach the artifacts to.
+
+          Must be the value used in 'databaseId' for the release to attach
+          assets to.
+        type: string
+        required: true
       java-vendor:
         description: |
           The Java vendor to use.
@@ -54,13 +62,17 @@ on:
         required: false
         default: 0
 jobs:
-  lint:
-    name: Lint
+  publish:
+    name: Publish
     permissions:
-      # -- Needed to clone the repository
-      contents: read
-    uses: ./.github/workflows/lint.yaml
+      # -- To clone repository and write release artifacts
+      contents: write
+      # -- To uploads packages
+      packages: write
+    uses: ./.github/workflows/publish.yaml
     with:
+      github-release-id: ${{inputs.github-release-id}}
+      attach-to-github-release: true
       java-version: ${{inputs.java-version}}
       java-vendor: ${{inputs.java-vendor}}
       gradle-version: ${{inputs.gradle-version}}

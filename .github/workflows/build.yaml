@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-name: Lint
+name: Build
 on:
   workflow_call:
     inputs:
@@ -41,6 +41,36 @@ on:
         type: string
         required: false
         default: wrapper
+      upload-artifacts:
+        description: |
+          Whether to upload artifacts.
+
+          Defaults to 'true'.
+        type: boolean
+        required: false
+        default: true
+      artifact-retention-days:
+        description: |
+          The duration, in days, to retain artifacts for.
+
+          Defaults to '0' which defaults to the value configured for the
+          repository.
+        type: number
+        required: false
+        default: 0
+    outputs:
+      artifact-id:
+        description: |
+          The ID of the generated artifacts.
+        value: ${{jobs.build.outputs.artifact-id}}
+      artifact-name:
+        description: |
+          The name of the generated artifacts.
+        value: ${{jobs.build.outputs.artifact-name}}
+      artifact-url:
+        description: |
+          The URL from which the generated artifacts can be downloaded.
+        value: ${{jobs.build.outputs.artifact-url}}
     secrets:
       github-token:
         description: |
@@ -50,25 +80,24 @@ on:
           Defaults to the value in "secrets.GITHUB_TOKEN" if not provided.
         required: false
 jobs:
-  lint:
-    name: Lint
+  build:
+    name: Build
     runs-on: ubuntu-latest
     permissions:
       # -- Needed to clone the repository
       contents: read
+    outputs:
+      artifact-id: ${{steps.upload-artifacts.outputs.artifact-id}}
+      artifact-name: dist
+      artifact-url: ${{steps.upload-artifacts.outputs.artifact-url}}
     steps:
-      - id: clone-repository
-        name: Clone the repository
-        uses: actions/checkout@v7
+      - id: checkout-repository
+        name: Checkout repository
+        uses: actions/checkout@v6
         with:
           ref: ${{inputs.git-ref}}
           lfs: true
           token: ${{secrets.github-token || secrets.GITHUB_TOKEN}}
-      - id: prepare-python
-        name: Prepare Python
-        uses: actions/setup-python@v7
-        with:
-          python-version: '>=3'
       - id: read-java-version
         name: Read Java version
         shell: bash
@@ -102,14 +131,19 @@ jobs:
           gradle-version: ${{inputs.gradle-version}}
           cache-cleanup: on-success
           gradle-home-cache-cleanup: true
-      - id: install-pre-commit
-        name: Install pre-commit
-        run: |
-          ./scripts/install-pre-commit.sh --force
       - id: setup-ci-workspace
         name: Setup CI Workspace
         run: ./gradlew setupCIWorkspace
-      - id: lint
-        name: Lint
-        run: |
-          pre-commit run --all-files
+      - id: build
+        name: Build
+        run: ./gradlew build
+      - id: upload-artifacts
+        name: Upload artifacts
+        if: inputs.upload-artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: build/libs/
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: ${{inputs.artifact-retention-days}}
