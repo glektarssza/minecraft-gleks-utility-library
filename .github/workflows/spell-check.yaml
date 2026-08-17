@@ -5,15 +5,13 @@ on:
     inputs:
       git-ref:
         description: |
-          The Git reference from which to clone the project.
+          The Git reference to run the workflow on.
 
-          This can be any valid Git commit-ish (e.g. a SHA, a ref, a tag, and so
-          on).
+          Must be a valid commit-ish (a branch, tag, commit, etc.).
 
-          Defaults to the SHA that caused the workflow to be triggered. If that
-          is unavailable the fully formed reference of the branch or tag that
-          triggered the workflow is used. If that is unavailable the repository
-          default branch is used.
+          Defaults to the reference that triggered the workflow for push and
+          pull request events ("github.ref") and the head SHA ("github.sha") for
+          all other events.
         type: string
         required: false
         default: ${{github.sha || github.ref || github.event.repository.default_branch}}
@@ -44,16 +42,17 @@ on:
     secrets:
       github-token:
         description: |
-          The token to use when making authenticated calls to the GitHub API.
-        required: true
-env:
-  GITHUB_TOKEN: ${{secrets.github-token || secrets.GITHUB_TOKEN}}
+          The token to use for authentication when making calls to the GitHub
+          APIs.
+
+          Defaults to the value in "secrets.GITHUB_TOKEN" if not provided.
+        required: false
 jobs:
   spell-check:
     name: Spell Check
     runs-on: ubuntu-latest
     permissions:
-      # -- To clone repository
+      # -- Needed to clone the repository
       contents: read
     steps:
       - id: checkout-repository
@@ -76,7 +75,7 @@ jobs:
         name: Setup NodeJS
         uses: actions/setup-node@v7
         with:
-          token: ${{env.GITHUB_TOKEN}}
+          token: ${{secrets.github-token || secrets.GITHUB_TOKEN}}
           node-version: ${{inputs.node-version}}
       - id: setup-non-pnpm-package-manager
         name: Setup NodeJS Package Manager

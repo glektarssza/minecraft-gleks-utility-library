@@ -35,11 +35,10 @@ jobs:
   spell-check:
     name: Spell Check
     permissions:
-      # -- To clone repository
+      # -- Needed to clone the repository
       contents: read
     uses: ./.github/workflows/spell-check.yaml
     with:
-      git-ref: ${{github.sha}}
       node-version: ${{inputs.node-version}}
       package-manager: ${{inputs.package-manager}}
       package-manager-version: ${{inputs.package-manager-version}}

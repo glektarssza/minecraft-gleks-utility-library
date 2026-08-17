@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-name: Manual Lint
+name: Manual Build
 on:
   workflow_dispatch:
     inputs:
@@ -54,15 +54,16 @@ on:
         required: false
         default: 0
 jobs:
-  lint:
-    name: Lint
+  build:
+    name: Build
     permissions:
       # -- Needed to clone the repository
       contents: read
-    uses: ./.github/workflows/lint.yaml
+    uses: ./.github/workflows/build.yaml
     with:
       java-version: ${{inputs.java-version}}
       java-vendor: ${{inputs.java-vendor}}
       gradle-version: ${{inputs.gradle-version}}
+      artifact-retention-days: ${{inputs.artifact-retention-days}}
     secrets:
       github-token: ${{secrets.GITHUB_TOKEN}}

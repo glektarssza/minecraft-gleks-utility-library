@@ -1,12 +1,28 @@
-# yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
-name: On Pull request
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: On Pull Request
 on:
   pull_request:
-    branches:
-      - main
-env:
-  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+concurrency:
+  cancel-in-progress: true
+  group: on-pull-request-${{github.ref_name}}
+  queue: single
 jobs:
+  build:
+    name: Build
+    permissions:
+      # -- Needed to clone the repository
+      contents: read
+    uses: ./.github/workflows/build.yaml
+    secrets:
+      github-token: ${{secrets.GITHUB_TOKEN}}
+  test:
+    name: Test
+    permissions:
+      # -- Needed to clone the repository
+      contents: read
+    uses: ./.github/workflows/test.yaml
+    secrets:
+      github-token: ${{secrets.GITHUB_TOKEN}}
   lint:
     name: Lint
     permissions:
@@ -21,5 +37,17 @@ jobs:
       # -- Needed to clone the repository
       contents: read
     uses: ./.github/workflows/spell-check.yaml
+    with:
+      node-version: '25'
+      package-manager: pnpm
+      package-manager-version: latest
+    secrets:
+      github-token: ${{secrets.GITHUB_TOKEN}}
+  dependency-submission:
+    name: Dependency Submission
+    permissions:
+      # -- Needed to clone the repository and submit dependency reports
+      contents: write
+    uses: ./.github/workflows/dependency-submission.yaml
     secrets:
       github-token: ${{secrets.GITHUB_TOKEN}}
