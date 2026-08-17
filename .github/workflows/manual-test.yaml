@@ -57,7 +57,7 @@ jobs:
   test:
     name: Test
     permissions:
-      # -- To clone repository
+      # -- Needed to clone the repository
       contents: read
     uses: ./.github/workflows/test.yaml
     with:

@@ -52,7 +52,7 @@ jobs:
     name: Spell Check
     runs-on: ubuntu-latest
     permissions:
-      # -- To clone repository
+      # -- Needed to clone the repository
       contents: read
     steps:
       - id: checkout-repository

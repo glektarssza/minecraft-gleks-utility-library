@@ -57,7 +57,7 @@ jobs:
   build:
     name: Build
     permissions:
-      # -- To clone repository
+      # -- Needed to clone the repository
       contents: read
     uses: ./.github/workflows/build.yaml
     with:

@@ -12,7 +12,7 @@ jobs:
   test:
     name: Test
     permissions:
-      # -- To clone repository
+      # -- Needed to clone the repository
       contents: read
     uses: ./.github/workflows/test.yaml
     with:
@@ -22,7 +22,7 @@ jobs:
   lint:
     name: Lint
     permissions:
-      # -- To clone repository
+      # -- Needed to clone the repository
       contents: read
     uses: ./.github/workflows/lint.yaml
     with:
@@ -42,7 +42,7 @@ jobs:
   release:
     name: Publish
     permissions:
-      # -- To clone repository write release artifacts
+      # -- Needed to clone the repository write release artifacts
       contents: write
     needs:
       - test

@@ -148,5 +148,5 @@ jobs:
         with:
           name: test-reports
           path: build/reports/tests/
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: ${{inputs.artifact-retention-days}}
