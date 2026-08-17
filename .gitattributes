@@ -9,3 +9,6 @@
 
 # All .cmd files are treated as text files with Windows-style line endings with UTF-8 encoding by default.
 *.ini text eol=crlf encoding=utf-8
+
+# Run all .png files through Git LFS
+*.png filter=lfs diff=lfs merge=lfs -text
