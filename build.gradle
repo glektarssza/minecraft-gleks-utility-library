@@ -2,7 +2,7 @@ plugins {
     id('eclipse')
     id('java-library')
     id('maven-publish')
-    id('com.gtnewhorizons.retrofuturagradle') version '2.0.2'
+    id('com.gtnewhorizons.retrofuturagradle') version '2.0.3'
     id('com.diffplug.spotless') version '8.8.0' apply false
 }
 
@@ -28,7 +28,7 @@ project.ext.getProperty = { String key ->
     return providers.gradleProperty(key).get()
 }
 
-group = "${getProperty('mod.base_group')}.${getProperty('mod.id')}"
+group = "${getProperty('mod.base_group')}.${getProperty('mod.group')}"
 version = getProperty('mod.version')
 
 base {
@@ -69,8 +69,8 @@ configurations {
 }
 
 minecraft {
-    username = 'Developer'
     mcVersion = getProperty('minecraft.version')
+    username = 'Developer'
     def args = ["-ea:${project.group}"]
     if (getPropertyOrDefault('mod.core_mod.enabled', 'false').toBoolean()) {
         args << '-Dfml.coreMods.load=' + getProperty('mod.core_mod.plugin_class_name')
@@ -81,7 +81,7 @@ minecraft {
         args << '-Dmixin.debug.export=true'
     }
     extraRunJvmArguments.addAll(args)
-    groupsToExcludeFromAutoReobfMapping.addAll('com.diffplug', 'com.diffplug.durian', 'net.industrial-craft')
+    groupsToExcludeFromAutoReobfMapping.addAll('com.diffplug', 'com.diffplug.durian')
     useDependencyAccessTransformers = true
     injectedTags.put('MOD_NAME', getProperty('mod.name'))
     injectedTags.put('MOD_ID', getProperty('mod.id'))
