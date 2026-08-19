@@ -15,7 +15,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 
-import com.glektarssza.utility_library.api.annotations.Nullable;
+import com.glektarssza.utility_library.annotations.Nullable;
 
 /**
  * The root mod object.
