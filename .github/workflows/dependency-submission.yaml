@@ -111,6 +111,6 @@ jobs:
         run: ./gradlew setupCIWorkspace
       - id: dependency-graph
         name: Generate and submit dependency graph
-        uses: gradle/actions/dependency-submission@v5
+        uses: gradle/actions/dependency-submission@v6
         with:
           artifact-retention-days: ${{inputs.artifact-retention-days}}
