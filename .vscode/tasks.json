@@ -809,6 +809,66 @@
             "problemMatcher": ["$gradle"]
         },
         {
+            "label": "gradle:setupWorkspace",
+            "detail": "Prepare the project workspace.",
+            "hide": false,
+            "icon": {
+                "id": "tools",
+                "color": "terminal.ansiWhite"
+            },
+            "group": {
+                "isDefault": false
+            },
+            "isBackground": false,
+            "dependsOrder": "sequence",
+            "dependsOn": ["gradle:prepareWorkspace"],
+            "runOptions": {
+                "instanceLimit": 1,
+                "instancePolicy": "silent",
+                "reevaluateOnRerun": true,
+                "runOn": "default"
+            },
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false
+            },
+            "problemMatcher": ["$gradle"]
+        },
+        {
+            "label": "gradle:initWorkspace",
+            "detail": "Prepare the project workspace.",
+            "hide": false,
+            "icon": {
+                "id": "tools",
+                "color": "terminal.ansiWhite"
+            },
+            "group": {
+                "isDefault": false
+            },
+            "isBackground": false,
+            "dependsOrder": "sequence",
+            "dependsOn": ["gradle:prepareWorkspace"],
+            "runOptions": {
+                "instanceLimit": 1,
+                "instancePolicy": "silent",
+                "reevaluateOnRerun": true,
+                "runOn": "default"
+            },
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false
+            },
+            "problemMatcher": ["$gradle"]
+        },
+        {
             "label": "gradle:prepareWorkspace",
             "detail": "Prepare the project workspace.",
             "hide": false,
